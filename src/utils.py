@@ -1,7 +1,8 @@
 import functools
 import logging
-import time
 import sys
+import time
+
 from telebot import TeleBot
 from services.repository import Repository
 from config import messages, LOG_DIR
