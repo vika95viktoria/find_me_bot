@@ -1,0 +1,13 @@
+
+list_albums: List all available albums
+load_new_album: Load a new album for indexing
+choose_action: What would you like to do?
+choose_album: Choose an album
+send_photo: Send me your photo for the search
+incorrect_input: I can't understand you, please choose something from the menu
+no_face_on_photo: Please, send me another photo. I can't detect your face on this one
+too_many_faces: Please, send another photo. More than 1 face on this photo
+wait: Looking for your photos. Give me a second
+no_photos: Unfortunately I wasn't able to find you in this album :(
+photo_found: Here is what I found!
+no_access: Sorry, you aren't allowed to use this bot

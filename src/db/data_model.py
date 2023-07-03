@@ -16,15 +16,13 @@ class Base(DeclarativeBase):
 user_albums = Table(
     "album_permissions",
     Base.metadata,
-    Column("user_id", ForeignKey("findme.users.user_id")),
-    Column("album_id", ForeignKey("findme.albums.album_id")),
-    schema='findme'
+    Column("user_id", ForeignKey("users.user_id")),
+    Column("album_id", ForeignKey("albums.album_id")),
 )
 
 
 class Album(Base):
     __tablename__ = "albums"
-    __table_args__ = {'schema': 'findme'}
 
     album_id: Mapped[int] = mapped_column(primary_key=True)
     full_name: Mapped[str] = mapped_column(String(500))
@@ -32,16 +30,13 @@ class Album(Base):
     index_file_name: Mapped[str] = mapped_column(String(100))
     mapping_file_name: Mapped[str] = mapped_column(String(100))
 
+
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {'schema': 'findme'}
 
     user_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     albums: Mapped[List[Album]] = relationship(secondary=user_albums)
 
-    chosen_album_id : Mapped[int] = mapped_column(ForeignKey(Album.album_id))
+    chosen_album_id: Mapped[int] = mapped_column(ForeignKey(Album.album_id))
     chosen_album: Mapped[Album] = relationship()
-
-
-

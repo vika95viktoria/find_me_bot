@@ -8,7 +8,7 @@ class DbConnector:
     def __init__(self):
         self.db_user = os.environ.get("DB_USER", "")
         self.instance_connection_name = os.environ['INSTANCE_CONNECTION_NAME']
-        self.db_pass = os.environ["DB_PASS"]  # e.g. 'my-db-password'
+        self.db_pass = os.environ["DB_PASS"]
         self.db_name = os.environ["DB_NAME"]
         self.connector = Connector()
 

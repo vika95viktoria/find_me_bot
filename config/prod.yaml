@@ -1,2 +1,4 @@
-schema: findme
-bucket_name: epam_photos
+bucket: epam_photos
+recognition_model: buffalo_l
+index_folder: indexes
+log_dir: log

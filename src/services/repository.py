@@ -1,7 +1,8 @@
-from sqlalchemy import select
+from sqlalchemy import select, exists
 from sqlalchemy.orm import Session
-from connection import DbConnector
+from db.connector import DbConnector
 from db.data_model import User, Album
+from typing import List
 
 
 class Repository:
@@ -9,11 +10,11 @@ class Repository:
         self.engine = DbConnector().get_engine()
         self.session = Session(self.engine)
 
-    def get_registered_users(self):
-        stmt = select(User.name)
-        return [x for x in self.session.scalars(stmt)]
+    def is_user_registered(self, user_name) -> bool:
+        stmt = select(exists(User).where(User.name == user_name))
+        return self.session.execute(stmt).scalar()
 
-    def get_available_albums(self, user_name: str):
+    def get_available_albums(self, user_name: str) -> List[str]:
         stmt = select(User).where(User.name == user_name)
         return [album.full_name for album in self.session.scalars(stmt).one().albums]
 
@@ -25,7 +26,7 @@ class Repository:
         user.chosen_album = album
         self.session.commit()
 
-    def get_chosen_album(self, user_name: str):
+    def get_chosen_album(self, user_name: str) -> (str, str):
         stmt = select(User).where(User.name == user_name)
         album = self.session.scalars(stmt).one().chosen_album
         return album.index_file_name, album.mapping_file_name
