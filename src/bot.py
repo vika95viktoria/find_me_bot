@@ -78,4 +78,5 @@ def search_photo(message: Message):
 
 
 if __name__ == "__main__":
+    print('Bot is deployed')
     bot.polling(none_stop=True, interval=0)
