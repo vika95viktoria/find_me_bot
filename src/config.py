@@ -21,7 +21,8 @@ with open(MESSAGE_DIR / 'messages_eng.yaml') as message_file:
 BUCKET_NAME = config['bucket']
 RECOGNITION_MODEL = config['recognition_model']
 INDEXES = config['index_folder']
-LOG_DIR = config['log_dir']
+
+LOG_DIR = PROJECT_ROOT / config['log_dir']
 
 
 class BotActions(enum.Enum):
