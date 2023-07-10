@@ -18,12 +18,29 @@ repository = Repository()
 
 
 def get_photo_from_message(message: Message) -> bytes:
+    """
+    Download image file from Telegram message object and store it locally
+
+    :param message: Telegram message object
+    :return: image content in bytes
+    """
     file_id = message.photo[-1].file_id
     file_info = bot.get_file(file_id)
     return bot.download_file(file_info.file_path)
 
 
 def get_photos_from_album(user_name: str, face: np.ndarray) -> List[InputMediaPhoto]:
+    """
+    Search for the photos with user face in chosen album
+
+    Get faiss index file path and mapping object path for the album user has chosen. Read these files from GCP and
+    recreate corresponding objects from them using pickle module. Then search for all images with face using faiss index.
+    Download all the found photos and create :class:`telebot.types.InputMediaPhoto` objects from them
+
+    :param user_name: telegram username
+    :param face: array representing face embedding of the user
+    :return: list of :class:`telebot.types.InputMediaPhoto` objects representing found images where face is detected
+    """
     index_file_name, mapping_file_name = repository.get_chosen_album(user_name)
     face_index = FaceIndex(storage_service.read_pickle(f'{INDEXES}/{index_file_name}'))
     embedding_map = storage_service.read_pickle(f'{INDEXES}/{mapping_file_name}')
@@ -36,6 +53,14 @@ def get_photos_from_album(user_name: str, face: np.ndarray) -> List[InputMediaPh
 @registration_required(repository, bot)
 @monitored
 def start(message: Message):
+    """
+    Handle initial call from user invocated by '/start' command in Telegram chat
+
+    Render interactive menu with available bot actions for the user and send a message asking to choose the action
+
+    :param message: telegram message
+    :return:
+    """
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add(*[KeyboardButton(action.value) for action in BotActions])
     bot.send_message(message.from_user.id, messages['choose_action'], reply_markup=markup)
@@ -45,6 +70,15 @@ def start(message: Message):
 @registration_required(repository, bot)
 @monitored
 def get_text_messages(message: Message):
+    """
+    Handle all text messages from bot users
+
+    Handle message of type text and send the corresponding response for the future interaction with the user. In case
+    of unexpected input send error message
+
+    :param message: telegram message
+    :return:
+    """
     albums = repository.get_available_albums(message.from_user.username)
     if message.text == messages['list_albums']:
         markup = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -61,8 +95,18 @@ def get_text_messages(message: Message):
 @registration_required(repository, bot)
 @monitored
 def search_photo(message: Message):
+    """
+    Search for all images with the person from the photo
+
+    Download photo from message and get face embedding from it. If there are no face embeddings found on the photo
+    or more than one, send the corresponding error message. Otherwise proceed with the search in chosen album. Based on
+    the search results either send album with all found photos or text message telling that nothing had been found.
+
+    :param message: telegram message
+    :return:
+    """
     photo_in_bytes = get_photo_from_message(message)
-    face = image_service.get_face_embedding_from_bytes(photo_in_bytes)
+    face = image_service.get_face_embeddings_from_bytes(photo_in_bytes)
     if len(face) == 0:
         bot.send_message(message.from_user.id, messages['no_face_on_photo'])
     elif len(face) > 1:

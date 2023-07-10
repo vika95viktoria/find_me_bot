@@ -26,5 +26,8 @@ LOG_DIR = PROJECT_ROOT / config['log_dir']
 
 
 class BotActions(enum.Enum):
+    """
+    Enum representing actions available in the bot through interactive menu
+    """
     LIST_ALBUMS = messages['list_albums']
     LOAD_ALBUM = messages['load_new_album']

@@ -55,17 +55,17 @@ class BotTestCase(TestCase):
         self.mock_bot.send_message.assert_called_with(self.test_message.from_user.id, messages['incorrect_input'])
 
     def test_search_photo_without_face(self):
-        self.mock_image_service.get_face_embedding_from_bytes.return_value = np.empty(0)
+        self.mock_image_service.get_face_embeddings_from_bytes.return_value = np.empty(0)
         search_photo(self.test_message)
         self.mock_bot.send_message.assert_called_with(self.test_message.from_user.id, messages['no_face_on_photo'])
 
     def test_search_photo_multiple_faces(self):
-        self.mock_image_service.get_face_embedding_from_bytes.return_value = np.zeros((2, 2))
+        self.mock_image_service.get_face_embeddings_from_bytes.return_value = np.zeros((2, 2))
         search_photo(self.test_message)
         self.mock_bot.send_message.assert_called_with(self.test_message.from_user.id, messages['too_many_faces'])
 
     def test_search_photo_not_found(self):
-        self.mock_image_service.get_face_embedding_from_bytes.return_value = np.zeros((1, 2))
+        self.mock_image_service.get_face_embeddings_from_bytes.return_value = np.zeros((1, 2))
         self.mock_repository.get_chosen_album.return_value = ('index_file.pkl', 'mapping_file.pkl')
         search_photo(self.test_message)
         expected_calls = [call.send_message(self.test_message.from_user.id, messages['wait']),
@@ -73,7 +73,7 @@ class BotTestCase(TestCase):
         self.mock_bot.send_message.assert_has_calls(expected_calls)
 
     def test_search_photo_found_results(self):
-        self.mock_image_service.get_face_embedding_from_bytes.return_value = np.zeros((1, 2))
+        self.mock_image_service.get_face_embeddings_from_bytes.return_value = np.zeros((1, 2))
         self.mock_repository.get_chosen_album.return_value = ('index_file.pkl', 'mapping_file.pkl')
         self.mock_storage_service.read_pickle.return_value = {1: 'image_1.png', 2: 'image_2.png', 3: 'image_3.png'}
         self.mock_storage_service.download_as_bytes.return_value = bytes()

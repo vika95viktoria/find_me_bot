@@ -5,6 +5,9 @@ from google.cloud.sql.connector import Connector
 
 
 class DbConnector:
+    """
+    Class representing connection pool for Cloud SQL
+    """
     def __init__(self):
         self.db_user = os.environ.get("DB_USER", "")
         self.instance_connection_name = os.environ['INSTANCE_CONNECTION_NAME']

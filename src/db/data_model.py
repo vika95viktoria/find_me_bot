@@ -22,6 +22,9 @@ user_albums = Table(
 
 
 class Album(Base):
+    """
+    Class representing albums table from the database. Uses sqlalchemy for mapping
+    """
     __tablename__ = "albums"
 
     album_id: Mapped[int] = mapped_column(primary_key=True)
@@ -32,6 +35,9 @@ class Album(Base):
 
 
 class User(Base):
+    """
+    Class representing users table from the database. Uses sqlalchemy for mapping
+    """
     __tablename__ = "users"
 
     user_id: Mapped[int] = mapped_column(primary_key=True)

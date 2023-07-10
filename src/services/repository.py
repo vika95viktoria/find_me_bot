@@ -6,19 +6,38 @@ from typing import List
 
 
 class Repository:
+    """
+    Class representing Data Access Layer using sqlalchemy orm
+    """
     def __init__(self):
         self.engine = DbConnector().get_engine()
         self.session = Session(self.engine)
 
     def is_user_registered(self, user_name) -> bool:
+        """
+        Check if user is present in users table
+        :param user_name: telegram username
+        :return: indicator whether user exists in users table or not
+        """
         stmt = select(exists(User).where(User.name == user_name))
         return self.session.execute(stmt).scalar()
 
     def get_available_albums(self, user_name: str) -> List[str]:
+        """
+        Get list of albums user has access to
+        :param user_name: telegram username
+        :return: list of album names available for this user
+        """
         stmt = select(User).where(User.name == user_name)
         return [album.full_name for album in self.session.scalars(stmt).one().albums]
 
     def submit_chosen_album(self, user_name, album_name):
+        """
+        Update album currently selected by user
+        :param user_name: telegram username
+        :param album_name: album name
+        :return:
+        """
         get_user_stmt = select(User).where(User.name == user_name)
         get_album_stmt = select(Album).where(Album.full_name == album_name)
         user = self.session.scalars(get_user_stmt).one()
@@ -27,6 +46,13 @@ class Repository:
         self.session.commit()
 
     def get_chosen_album(self, user_name: str) -> (str, str):
+        """
+        Get chosen album artifacts name
+
+        Get faiss index path and mapping file path in GCP for the album currently selected by user
+        :param user_name: telegram username
+        :return: tuple with faiss index path and mapping file path
+        """
         stmt = select(User).where(User.name == user_name)
         album = self.session.scalars(stmt).one().chosen_album
         return album.index_file_name, album.mapping_file_name
