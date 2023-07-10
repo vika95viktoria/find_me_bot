@@ -1,12 +1,7 @@
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
-from sqlalchemy import String
-from sqlalchemy import Table
-from sqlalchemy import ForeignKey
-from sqlalchemy import Column
-from sqlalchemy.orm import mapped_column
 from typing import List
-from sqlalchemy.orm import relationship
+
+from sqlalchemy import String, Table, ForeignKey, Column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):

@@ -1,15 +1,16 @@
+import os
+from typing import List
+
+import numpy as np
 import telebot
 from telebot.types import InputMediaPhoto, ReplyKeyboardMarkup, KeyboardButton, Message
-import os
-import numpy as np
-from config import BUCKET_NAME, INDEXES, messages, BotActions
-from recognition.face_index import FaceIndex
-from services.image_service import ImageService
-from services.gcp_service import GCPStorageService
-from services.repository import Repository
-from typing import List
-from utils import registration_required, monitored
 
+from config import BUCKET_NAME, INDEXES, messages, BotActions
+from index.face_index import FaceIndex
+from services.gcp_service import GCPStorageService
+from services.image_service import ImageService
+from services.repository import Repository
+from utils import registration_required, monitored
 
 bot = telebot.TeleBot(os.environ['BOT_TOKEN'])
 image_service = ImageService()

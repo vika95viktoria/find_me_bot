@@ -4,8 +4,9 @@ import sys
 import time
 
 from telebot import TeleBot
-from services.repository import Repository
+
 from config import messages, LOG_DIR
+from services.repository import Repository
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -41,6 +42,7 @@ def registration_required(repository: Repository, bot: TeleBot):
     :param bot: telegram bot interface allowing to send messages back to user
     :return: decorated function
     """
+
     def decorator_registration(func):
         @functools.wraps(func)
         def registration_wrapper(*args, **kwargs):
@@ -64,6 +66,7 @@ def monitored(func):
     :param func: function to be monitored
     :return: decorated function
     """
+
     @functools.wraps(func)
     def decorator_monitored(*args, **kwargs):
         username, _ = get_user_from_args(args)

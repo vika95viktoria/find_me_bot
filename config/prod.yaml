@@ -1,4 +1,5 @@
 bucket: epam_photos
+test_bucket: findme_test
 recognition_model: buffalo_l
 index_folder: indexes
 log_dir: log

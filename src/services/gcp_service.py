@@ -1,11 +1,13 @@
-from google.cloud import storage
 import pickle
+
+from google.cloud import storage
 
 
 class GCPStorageService:
     """
     Class providing interface for interaction with GCP Storage
     """
+
     def __init__(self, bucket_name):
         self.storage_client = storage.Client()
         self.bucket = self.storage_client.get_bucket(bucket_name)

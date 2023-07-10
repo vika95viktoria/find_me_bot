@@ -1,15 +1,18 @@
 import cv2
 import numpy as np
+from insightface.app import FaceAnalysis
 
-from recognition.face_recognition import FaceRecognitionModel
+from config import RECOGNITION_MODEL
 
 
 class ImageService:
     """
     Class representing wrapper for FaceRecognitionModel
     """
+
     def __init__(self):
-        self.face_model = FaceRecognitionModel()
+        self.app = FaceAnalysis(name=RECOGNITION_MODEL, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+        self.app.prepare(ctx_id=0)
 
     def get_face_embeddings(self, img_arr: np.ndarray) -> np.ndarray:
         """
@@ -17,7 +20,8 @@ class ImageService:
         :param img_arr: array representing image to get face embeddings from
         :return: array of face embeddings
         """
-        return np.array(self.face_model.get_faces(img_arr))
+        emb_res = self.app.get(img_arr)
+        return np.array([face.embedding for face in emb_res])
 
     def get_face_embeddings_from_bytes(self, img_bytes: bytes) -> np.ndarray:
         """
@@ -30,11 +34,3 @@ class ImageService:
         img_arr = np.asarray(bytearray(img_bytes), dtype="uint8")
         img_arr = cv2.imdecode(img_arr, cv2.IMREAD_COLOR)
         return self.get_face_embeddings(img_arr)
-
-
-
-
-
-
-
-

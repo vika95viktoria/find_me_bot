@@ -33,6 +33,10 @@ docker build -t findme-bot .
 docker run -d -e BOT_TOKEN='{bot_token}' -e INSTANCE_CONNECTION_NAME='{projectId}:{region}:{instanceName}' -e DB_USER='{user}' -e DB_PASS='{password}' -e DB_NAME='{database}' -e GOOGLE_APPLICATION_CREDENTIALS={path_to_json_file} findme-bot
 ```
 
+## Database
+
+Database schema can be found in `data/db_schema.sql`
+
 ## Usage example
 
 Here is a simple example of user-bot interaction. User has already chosen the album to search in (EPAM: Music Fest 2017) and sends the picture for the search

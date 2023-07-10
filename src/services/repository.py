@@ -1,16 +1,23 @@
+from typing import List
+
 from sqlalchemy import select, exists
+from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
+
 from db.connector import DbConnector
 from db.data_model import User, Album
-from typing import List
 
 
 class Repository:
     """
     Class representing Data Access Layer using sqlalchemy orm
     """
-    def __init__(self):
-        self.engine = DbConnector().get_engine()
+
+    def __init__(self, engine: Engine = None):
+        if not engine:
+            self.engine = DbConnector().get_engine()
+        else:
+            self.engine = engine
         self.session = Session(self.engine)
 
     def is_user_registered(self, user_name) -> bool:
