@@ -40,7 +40,6 @@ class GCPStorageService:
 
         :param blob_name: name of the future blob in GCP bucket
         :param path_to_file: local filepath to the file to be uploaded
-        :return:
         """
         blob = self.bucket.blob(blob_name)
         blob.upload_from_filename(path_to_file)

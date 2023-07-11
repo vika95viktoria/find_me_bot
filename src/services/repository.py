@@ -43,7 +43,6 @@ class Repository:
         Update album currently selected by user
         :param user_name: telegram username
         :param album_name: album name
-        :return:
         """
         get_user_stmt = select(User).where(User.name == user_name)
         get_album_stmt = select(Album).where(Album.full_name == album_name)

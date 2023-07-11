@@ -60,7 +60,6 @@ def start(message: Message):
     Render interactive menu with available bot actions for the user and send a message asking to choose the action
 
     :param message: telegram message
-    :return:
     """
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add(*[KeyboardButton(action.value) for action in BotActions])
@@ -78,7 +77,6 @@ def get_text_messages(message: Message):
     of unexpected input send error message
 
     :param message: telegram message
-    :return:
     """
     albums = repository.get_available_albums(message.from_user.username)
     if message.text == messages['list_albums']:
@@ -104,7 +102,6 @@ def search_photo(message: Message):
     the search results either send album with all found photos or text message telling that nothing had been found.
 
     :param message: telegram message
-    :return:
     """
     photo_in_bytes = get_photo_from_message(message)
     face = image_service.get_face_embeddings_from_bytes(photo_in_bytes)

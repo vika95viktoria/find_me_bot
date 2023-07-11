@@ -22,6 +22,8 @@ class DbConnector:
         """
         Initializes a connection pool for a Cloud SQL instance of SQL Server.
         Uses the Cloud SQL Python Connector package.
+
+        :return: connection pool for the Cloud SQL instance
         """
 
         def get_connection() -> pg8000.Connection:
